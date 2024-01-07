@@ -12,6 +12,7 @@ load_dotenv()
 API_BASE_URL = os.getenv('API_BASE_URL')
 API_USERNAME = os.getenv('API_USERNAME')
 API_PASSWORD = os.getenv('API_PASSWORD')
+DOMAIN_NAME = os.getenv('DOMAIN_NAME')
 
 # IP-Adresse, die zur Whitelist hinzugefügt werden soll
 IP_TO_WHITELIST = "1.2.3.4"
@@ -41,7 +42,28 @@ def getClients(api_base_url, api_username, api_password):
     endpoint = f"{api_base_url}/control/access/list"
     response = requests.get(endpoint, auth=HTTPBasicAuth(api_username, api_password))
     result = response.json()
-    print(result["allowed_clients"])
+    #return result["allowed_clients"]
+    return result
+
+def addClient(api_base_url, api_username, api_password, domainname):
+    endpoint = f"{api_base_url}/control/access/set"
+
+    currentList = getClients(api_base_url, api_username, api_password)
+    currentAllowList = currentList["allowed_clients"]
+    currentDisallowList = currentList["disallowed_clients"]
+    currentBlockedHosts = currentList["blocked_hosts"]
+
+    clientId = getIPAdress(domainname)
+    allowedList = currentAllowList + [clientId]
+
+    data = {
+        "allowed_clients":allowedList,
+        "disallowed_clients":currentDisallowList,
+        "blocked_hosts":currentBlockedHosts
+    }
+    #return data
+    response = requests.post(endpoint, auth=HTTPBasicAuth(api_username, api_password), json=data)
+    return response
 
 def getIPAdress(domainname):
     lookup = dns.resolver.resolve(domainname, 'A')
@@ -52,4 +74,6 @@ def getIPAdress(domainname):
 
 # Funktion aufrufen
 #add_ip_to_whitelist(API_BASE_URL, API_USERNAME, API_PASSWORD, IP_TO_WHITELIST)
-#getClients(API_BASE_URL, API_USERNAME, API_PASSWORD)
+#print(getClients(API_BASE_URL, API_USERNAME, API_PASSWORD))
+
+print(addClient(API_BASE_URL, API_USERNAME, API_PASSWORD, DOMAIN_NAME))
