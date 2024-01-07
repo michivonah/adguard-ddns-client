@@ -1,10 +1,12 @@
+import os
+from dotenv import load_dotenv
 import requests
 from requests.auth import HTTPBasicAuth
 
 # AdGuard Home API Informationen
-API_BASE_URL = ""
-API_USERNAME = ""
-API_PASSWORD = ""
+API_BASE_URL = os.getenv('API_BASE_URL')
+API_USERNAME = os.getenv('API_USERNAME')
+API_PASSWORD = os.getenv('API_PASSWORD')
 
 # IP-Adresse, die zur Whitelist hinzugefügt werden soll
 IP_TO_WHITELIST = "1.2.3.4"
