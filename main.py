@@ -2,6 +2,8 @@ import os
 from dotenv import load_dotenv
 import requests
 from requests.auth import HTTPBasicAuth
+import dns
+import dns.resolver
 
 # Load envirommental variables
 load_dotenv()
@@ -41,13 +43,13 @@ def getClients(api_base_url, api_username, api_password):
     result = response.json()
     print(result["allowed_clients"])
 
-def getIPAdress(domainname, dnsServer):
-    endpoint = ""
-    ip = "1.1.1.1"
+def getIPAdress(domainname):
+    lookup = dns.resolver.resolve(domainname, 'A')
+    for ipval in lookup:
+        ip = ipval.to_text()
     return ip
     
 
 # Funktion aufrufen
 #add_ip_to_whitelist(API_BASE_URL, API_USERNAME, API_PASSWORD, IP_TO_WHITELIST)
-getClients(API_BASE_URL, API_USERNAME, API_PASSWORD)
-
+#getClients(API_BASE_URL, API_USERNAME, API_PASSWORD)
