@@ -36,15 +36,23 @@ def addClient(api_base_url, api_username, api_password, domainname):
     currentBlockedHosts = currentList["blocked_hosts"]
 
     clientId = getIPAdress(domainname)
-    allowedList = currentAllowList + [clientId]
+    if not clientId in currentAllowList:
+        allowedList = currentAllowList + [clientId]
 
-    data = {
+        data = {
         "allowed_clients":allowedList,
         "disallowed_clients":currentDisallowList,
         "blocked_hosts":currentBlockedHosts
-    }
-    response = requests.post(endpoint, auth=HTTPBasicAuth(api_username, api_password), json=data)
-    return response
+        }
+
+        response = requests.post(endpoint, auth=HTTPBasicAuth(api_username, api_password), json=data)
+        if response.status_code == 200:
+            return f"{clientId} successfully added to the list of allowed clients."
+        else:
+            return f"An error occured while adding {clientId} to the list of allowed clients. Error message: {response.text}"
+    else:
+        return f"{clientId} already in list of allowed clients. Nothing was changed."
+
 
 # Resolves the ip address of a domainname
 def getIPAdress(domainname):
@@ -55,5 +63,4 @@ def getIPAdress(domainname):
 
 # Main programm
 if __name__ == '__main__':
-    #print(getClients(API_BASE_URL, API_USERNAME, API_PASSWORD))
     print(addClient(API_BASE_URL, API_USERNAME, API_PASSWORD, DOMAIN_NAME))
