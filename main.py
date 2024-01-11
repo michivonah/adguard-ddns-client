@@ -1,6 +1,6 @@
 # AdGuard Home - Add DDNS IP as allowed client
 # Michi von Ah - January 2024
-# AdGuard API Documentation (inofficial): https://fossies.org/linux/AdGuardHome/AGHTechDoc.md
+# AdGuard API Documentation (inofficial): https://fossies.org/linux/AdGuardHome/AGHTechDoc.md#list-access-settings
 
 # Import modules
 import os
