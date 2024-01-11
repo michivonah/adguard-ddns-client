@@ -13,11 +13,14 @@ Use as docker container on your server:
 
     ```crontab -e```
 
-3. Add the following line and change the enviromental variables to your server
+3. Add the following line to the cronjob of your server and change the enviromental variables for your needs
 
-    ```0 * * * * docker run -d --rm --env API_BASE_URL="https://example.com" --env API_USERNAME=YOUR_USER --env API_PASSWORD=YOUR_PASSWORD --env DOMAIN_NAME=YOUR_DDNS_DOMAIN adguard-ddns-client```
+    ```0 * * * * docker run -d --rm --env API_BASE_URL="https://example.com" --env API_USERNAME=YOUR_USER --env API_PASSWORD=YOUR_PASSWORD --env DOMAIN_NAME=YOUR_DDNS_DOMAIN ghcr.io/michivonah/adguard-ddns-client:main```
 
-4. Finished. Now the cronjobs runs every hour and adds the clients ip address if it is missing.
+    Replace `0 * * * *` to run the job more often than once a hour.
+    Use `0/30 * * * *` to run the job every 30 mins or `5 * * * *` to run the job every 5 minutes. Customize it to your needs.
+
+4. Finished. Now the cronjobs runs as defined and adds the clients ip address if it is missing to AdGuard Home's Client whitelist.
 
 ## Enviormental variables
 These environment variables are supported
